@@ -1,0 +1,65 @@
+<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
+<script src="jquery.min.js"></script>
+
+<script type="text/javascript">
+function loadMap (options) {
+
+    // geocoder docs: http://code.google.com/apis/maps/documentation/geocoding/
+
+    var geocoder = new google.maps.Geocoder();
+
+    if (!geocoder) {
+        if (options.onError)
+            options.onError ('Failed to create geocoder');
+        return;
+    }
+
+    geocoder.geocode ({
+        address: options.address
+        }, 
+        function (results, status) {
+            if (status != google.maps.GeocoderStatus.OK) {
+                if (options.onError)
+                    options.onError ('Geocoder response failed.');
+                return;
+            }
+
+            if (!results.length) {
+                if (options.onError)
+                    options.onError ('Failed to locate address.');
+                return;
+            }
+
+            var myOptions = {
+                zoom: options.zoom,
+                center: results[0].geometry.location,
+                mapTypeId: options.mapType
+            };
+
+            var map = new google.maps.Map (document.getElementById (options.idDiv), myOptions);
+
+            var marker = new google.maps.Marker ({
+                position: results[0].geometry.location,
+                map: map
+            });
+        }
+    );
+}
+
+$(document).ready (function () {
+    loadMap ({
+        address: '1600+Amphitheatre+Parkway,+Mountain+View,+CA',
+        idDiv: 'listing-map',
+        zoom: 11,
+        mapType: google.maps.MapTypeId.ROADMAP,
+        onError: function (error) {
+            $('##listing-map').html (error);
+        }
+    });
+});
+</script>
+<style>
+#listing-map {width:400px; height:400px}
+</style>
+<div id="listing-map"></div>

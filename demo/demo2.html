@@ -1,0 +1,15 @@
+<!DOCTYPE>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="jquery.min.js"></script>
+</head>
+<body>
+</body>
+</html>
+
+<script>
+    $.post('https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyA7w1kPdYOnpkNqfyr7QqC9yDtRnkI5xcg', function(data) {
+        alert(JSON.stringify(data));
+    })
+</script>
